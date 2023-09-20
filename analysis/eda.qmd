@@ -3,25 +3,118 @@ title: "eda"
 format: html
 editor: visual
 author: Ziwen Lu
+execute:
+  warning: false
+bibliography: references.bib
 ---
 
-## Exercise 02
-
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
-
-## Running Code
-
-When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+## Exercise 03
 
 ```{r}
-1 + 1
+library(tidyverse)
+library(here)
+
+covid19_cases_and_testing <- read_csv(here("data/covid19_cases_and_testing.csv")) |>
+  select("State/Territory","Level of Community Transmission","Case Rate per 100000","Total Deaths","Confirmed Deaths","Probable Deaths","Total % Positive","# Tests per 100K","New Cases","New Deaths")
+glimpse(covid19_cases_and_testing)
 ```
 
-You can add options to executable code like this
+[@cdc]
+
+Note: I added the <a href = "https://covid.cdc.gov/covid-data-tracker/#datatracker-home" target = "_blank">URL</a> in Zotero while it isn't shown here like DOI. 
+
+This data set comes from Centers of Disease Control and Prevention (CDC) Covid Data Tracker in 2021 autumn. CDC gathers data from health departments across the United States through electronic reporting systems from all institution which have a Covid-19 surveillance system. State-level data with different cases, death rates, tested population, etc. are displayed as columns (51 in total). Categorical data such as state name and level of community transmission, and numeric data like deaths, cases, percentage of total positive population are included, and most of them are numeric data. This data set does not contain weights since it is just a patient record, not entering the model building steps. 
+
+## Exercise 04
+
+From the previous glimpse code, we could say that this is a state-level data with 10 columns and 51 rows. 20% data are character data and the rest of 80% are numeric data. It describes the Covid-19 trend, including case, test and death trend until 2021 autumn. I used the website filter function and cleanned it in Excel so it is tidy enough. 
+
+## Exercise 05
 
 ```{r}
-#| echo: false
-2 * 2
+summary(covid19_cases_and_testing)
+var(covid19_cases_and_testing$`Case Rate per 100000`)
+sd(covid19_cases_and_testing$`Case Rate per 100000`)
+var(covid19_cases_and_testing$`Total Deaths`)
+sd(covid19_cases_and_testing$`Total Deaths`)
+var(covid19_cases_and_testing$`New Cases`)
+sd(covid19_cases_and_testing$`New Cases`)
+var(covid19_cases_and_testing$`New Deaths`)
+sd(covid19_cases_and_testing$`New Deaths`)
+```
+I calculated variables' min, median, max, 1st & 3rd quartile, NA, range, variance and standard deviation value. I noticed that there are a few missing value in confirmed & probable deaths, and test per 100k variables. I don't think these summary statistics shown as numbers are very helpful for me to understand the data set vividly. A box plot or histogram might help, though. Yet I can still say that there are less new deaths number than new cases, some facts like that. 
+
+## Exercise 06
+
+```{r}
+bar_01 <- covid19_cases_and_testing |>
+  slice_max(order_by = `Total Deaths`, n = 7) |>
+  mutate(`State/Territory` = fct_reorder(`State/Territory`, -`Total Deaths`))
+
+library(ggthemes)
+ggplot(bar_01,
+       aes(x = `State/Territory`,
+           y = `Total Deaths`,
+           fill = `State/Territory`)) +
+  guides(fill = "none") +
+  geom_col() +
+  labs(title = "Top 7 states with the most Covid deaths",
+       subtitle = "In 2021 autumn",
+       caption = "Source : CDC COVID Data Tracker",
+       x = "State",
+       y = "Death Rate") +
+  scale_y_continuous(labels = scales::comma) +
+  theme_pander() +
+  theme(plot.margin = unit(c(1,1,1,1), "cm"),
+        axis.text=element_text(size = 11),
+        axis.title.x = element_blank(),
+        axis.text.x = element_text(angle = 12, hjust = 0.5, vjust = 0.5),
+        plot.title = element_text(size = 14),
+        plot.subtitle = element_text(size = 13),    
+        plot.caption = element_text(size = 11))
 ```
 
-The `echo: false` option disables the printing of code (only output is displayed).
+```{r}
+covid19_cases_and_testing$`New Cases` <- covid19_cases_and_testing$`New Cases`/1000
+ggplot(covid19_cases_and_testing, aes(x = `New Cases`)) + 
+  geom_density(color="#619CFF", fill="lightblue") +
+  labs(title = 'Covid-19 new cases density',
+       subtitle = "In 2021 autumn",
+       caption = 'Source : CDC COVID Data Tracker',
+       x = "New Cases (thousand)",
+       y = "4") +
+  theme_minimal() +
+  theme(plot.margin = unit(c(1,1,1,1), "cm"),
+        axis.text=element_text(size = 11),
+        axis.title.y = element_blank(),
+        plot.title = element_text(size = 14),
+        plot.subtitle = element_text(size = 13),    
+        plot.caption = element_text(size = 11))
+```
+
+```{r}
+scatter_03 <- na.omit(covid19_cases_and_testing)
+ggplot(scatter_03, aes(x = `Case Rate per 100000`,
+               y = `# Tests per 100K`,
+               color = `Total % Positive`)) +
+  geom_point() +
+  scale_y_log10('Test Rate', 
+                labels = scales::comma) +
+  labs(title = "Relationship between Covid-19 case rate and test rate",
+       subtitle = "per 100 thousand in 2021 autumn, 27 states without missing values",
+       caption = "Source : CDC COVID Data Tracker",
+       x = "Case Rate") +
+  scale_x_continuous(labels = scales::comma) +
+  scale_color_discrete(labels = c("3-4.9","5-7.9","8-9.9","10-14.9","15-19.9","20-24.9"),
+                       name = "Total Positive (%)") +
+  theme_classic() +
+  theme(plot.margin = unit(c(1,1,1,1), "cm"),
+        axis.text=element_text(size = 11),
+        plot.title = element_text(size = 14),
+        plot.subtitle = element_text(size = 13),    
+        plot.caption = element_text(size = 11))
+```
+
+## Exercise 07
+
+I would like to choose more variables to test their relationship, not only in this file, but merging with other data set, such as vaccine data by state. Also, I want to know more categorical data like race so that I can have more graphs with group. Another good practice is try to build a linear regression model based on those numeric variables. 

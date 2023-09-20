@@ -55,7 +55,26 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="eda_files/libs/clipboard/clipboard.min.js"></script>
@@ -101,29 +120,192 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<section id="quarto" class="level2">
-<h2 class="anchored" data-anchor-id="quarto">Quarto</h2>
-<p>Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <a href="https://quarto.org" class="uri">https://quarto.org</a>.</p>
+<section id="exercise-03" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-03">Exercise 03</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>covid19_cases_and_testing <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"data/covid19_cases_and_testing.csv"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="st">"State/Territory"</span>,<span class="st">"Level of Community Transmission"</span>,<span class="st">"Case Rate per 100000"</span>,<span class="st">"Total Deaths"</span>,<span class="st">"Confirmed Deaths"</span>,<span class="st">"Probable Deaths"</span>,<span class="st">"Total % Positive"</span>,<span class="st">"# Tests per 100K"</span>,<span class="st">"New Cases"</span>,<span class="st">"New Deaths"</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(covid19_cases_and_testing)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 51
+Columns: 10
+$ `State/Territory`                 &lt;chr&gt; "Alabama", "Alaska", "Arizona", "Ark…
+$ `Level of Community Transmission` &lt;chr&gt; "high", "high", "high", "high", "hig…
+$ `Case Rate per 100000`            &lt;dbl&gt; 15669, 13123, 14585, 15996, 11636, 1…
+$ `Total Deaths`                    &lt;dbl&gt; 13209, 454, 19379, 7412, 67358, 7374…
+$ `Confirmed Deaths`                &lt;dbl&gt; 10354, NA, 17265, NA, NA, 6544, 6963…
+$ `Probable Deaths`                 &lt;dbl&gt; 2855, NA, 2114, NA, NA, 830, 1500, 1…
+$ `Total % Positive`                &lt;chr&gt; "10-14.9%", "5-7.9%", "10-14.9%", "8…
+$ `# Tests per 100K`                &lt;dbl&gt; 114755.16, 416934.43, 136657.28, 114…
+$ `New Cases`                       &lt;dbl&gt; 3462, 870, 2830, 1809, 9543, 1538, 1…
+$ `New Deaths`                      &lt;dbl&gt; 161, 1, 19, 17, 171, 25, 16, 0, 0, 8…</code></pre>
+</div>
+</div>
+<p><span class="citation" data-cites="cdc">(<a href="#ref-cdc" role="doc-biblioref">CDC, n.d.</a>)</span></p>
+<p>Note: I added the <a href="https://covid.cdc.gov/covid-data-tracker/#datatracker-home" target="_blank">URL</a> in Zotero while it isn’t shown here like DOI.</p>
+<p>This data set comes from Centers of Disease Control and Prevention (CDC) Covid Data Tracker in 2021 autumn. CDC gathers data from health departments across the United States through electronic reporting systems from all institution which have a Covid-19 surveillance system. State-level data with different cases, death rates, tested population, etc. are displayed as columns (51 in total). Categorical data such as state name and level of community transmission, and numeric data like deaths, cases, percentage of total positive population are included, and most of them are numeric data. This data set does not contain weights since it is just a patient record, not entering the model building steps.</p>
 </section>
-<section id="running-code" class="level2">
-<h2 class="anchored" data-anchor-id="running-code">Running Code</h2>
-<p>When you click the <strong>Render</strong> button a document will be generated that includes both content and the output of embedded code. You can embed code like this:</p>
+<section id="exercise-04" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-04">Exercise 04</h2>
+<p>From the previous glimpse code, we could say that this is a state-level data with 10 columns and 51 rows. 20% data are character data and the rest of 80% are numeric data. It describes the Covid-19 trend, including case, test and death trend until 2021 autumn. I used the website filter function and cleanned it in Excel so it is tidy enough.</p>
+</section>
+<section id="exercise-05" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-05">Exercise 05</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">+</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(covid19_cases_and_testing)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 2</code></pre>
+<pre><code> State/Territory    Level of Community Transmission Case Rate per 100000
+ Length:51          Length:51                       Min.   : 4647       
+ Class :character   Class :character                1st Qu.:11347       
+ Mode  :character   Mode  :character                Median :13072       
+                                                    Mean   :12550       
+                                                    3rd Qu.:14564       
+                                                    Max.   :17252       
+                                                                        
+  Total Deaths   Confirmed Deaths Probable Deaths Total % Positive  
+ Min.   :  285   Min.   :  915    Min.   :   0    Length:51         
+ 1st Qu.: 2700   1st Qu.: 3569    1st Qu.: 228    Class :character  
+ Median : 8251   Median : 7827    Median : 874    Mode  :character  
+ Mean   :12415   Mean   :10190    Mean   :1181                      
+ 3rd Qu.:15349   3rd Qu.:14615    3rd Qu.:1906                      
+ Max.   :67358   Max.   :24546    Max.   :3342                      
+                 NA's   :22       NA's   :22                        
+ # Tests per 100K   New Cases       New Deaths    
+ Min.   : 59558   Min.   :    0   Min.   :  0.00  
+ 1st Qu.:125969   1st Qu.:  814   1st Qu.:  6.50  
+ Median :157166   Median : 2178   Median : 17.00  
+ Mean   :177355   Mean   : 3022   Mean   : 40.76  
+ 3rd Qu.:192946   3rd Qu.: 3762   3rd Qu.: 48.50  
+ Max.   :416934   Max.   :18097   Max.   :377.00  
+ NA's   :3                                        </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(covid19_cases_and_testing<span class="sc">$</span><span class="st">`</span><span class="at">Case Rate per 100000</span><span class="st">`</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 8851485</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(covid19_cases_and_testing<span class="sc">$</span><span class="st">`</span><span class="at">Case Rate per 100000</span><span class="st">`</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2975.145</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(covid19_cases_and_testing<span class="sc">$</span><span class="st">`</span><span class="at">Total Deaths</span><span class="st">`</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 205269810</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(covid19_cases_and_testing<span class="sc">$</span><span class="st">`</span><span class="at">Total Deaths</span><span class="st">`</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 14327.24</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(covid19_cases_and_testing<span class="sc">$</span><span class="st">`</span><span class="at">New Cases</span><span class="st">`</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 10435912</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(covid19_cases_and_testing<span class="sc">$</span><span class="st">`</span><span class="at">New Cases</span><span class="st">`</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3230.466</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(covid19_cases_and_testing<span class="sc">$</span><span class="st">`</span><span class="at">New Deaths</span><span class="st">`</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4340.824</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(covid19_cases_and_testing<span class="sc">$</span><span class="st">`</span><span class="at">New Deaths</span><span class="st">`</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 65.88493</code></pre>
 </div>
 </div>
-<p>You can add options to executable code like this</p>
+<p>I calculated variables’ min, median, max, 1st &amp; 3rd quartile, NA, range, variance and standard deviation value. I noticed that there are a few missing value in confirmed &amp; probable deaths, and test per 100k variables. I don’t think these summary statistics shown as numbers are very helpful for me to understand the data set vividly. A box plot or histogram might help, though. Yet I can still say that there are less new deaths number than new cases, some facts like that.</p>
+</section>
+<section id="exercise-06" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-06">Exercise 06</h2>
 <div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 4</code></pre>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>bar_01 <span class="ot">&lt;-</span> covid19_cases_and_testing <span class="sc">|&gt;</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_max</span>(<span class="at">order_by =</span> <span class="st">`</span><span class="at">Total Deaths</span><span class="st">`</span>, <span class="at">n =</span> <span class="dv">7</span>) <span class="sc">|&gt;</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">`</span><span class="at">State/Territory</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">fct_reorder</span>(<span class="st">`</span><span class="at">State/Territory</span><span class="st">`</span>, <span class="sc">-</span><span class="st">`</span><span class="at">Total Deaths</span><span class="st">`</span>))</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggthemes)</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(bar_01,</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> <span class="st">`</span><span class="at">State/Territory</span><span class="st">`</span>,</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>           <span class="at">y =</span> <span class="st">`</span><span class="at">Total Deaths</span><span class="st">`</span>,</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>           <span class="at">fill =</span> <span class="st">`</span><span class="at">State/Territory</span><span class="st">`</span>)) <span class="sc">+</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">fill =</span> <span class="st">"none"</span>) <span class="sc">+</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Top 7 states with the most Covid deaths"</span>,</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"In 2021 autumn"</span>,</span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">"Source : CDC COVID Data Tracker"</span>,</span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"State"</span>,</span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Death Rate"</span>) <span class="sc">+</span></span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>comma) <span class="sc">+</span></span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_pander</span>() <span class="sc">+</span></span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.margin =</span> <span class="fu">unit</span>(<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>), <span class="st">"cm"</span>),</span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text=</span><span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>),</span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">12</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>),</span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>),</span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.subtitle =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">13</span>),    </span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="eda_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>The <code>echo: false</code> option disables the printing of code (only output is displayed).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>covid19_cases_and_testing<span class="sc">$</span><span class="st">`</span><span class="at">New Cases</span><span class="st">`</span> <span class="ot">&lt;-</span> covid19_cases_and_testing<span class="sc">$</span><span class="st">`</span><span class="at">New Cases</span><span class="st">`</span><span class="sc">/</span><span class="dv">1000</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(covid19_cases_and_testing, <span class="fu">aes</span>(<span class="at">x =</span> <span class="st">`</span><span class="at">New Cases</span><span class="st">`</span>)) <span class="sc">+</span> </span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">color=</span><span class="st">"#619CFF"</span>, <span class="at">fill=</span><span class="st">"lightblue"</span>) <span class="sc">+</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">'Covid-19 new cases density'</span>,</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"In 2021 autumn"</span>,</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">'Source : CDC COVID Data Tracker'</span>,</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"New Cases (thousand)"</span>,</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"4"</span>) <span class="sc">+</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.margin =</span> <span class="fu">unit</span>(<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>), <span class="st">"cm"</span>),</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text=</span><span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>),</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>),</span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.subtitle =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">13</span>),    </span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="eda_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>scatter_03 <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(covid19_cases_and_testing)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(scatter_03, <span class="fu">aes</span>(<span class="at">x =</span> <span class="st">`</span><span class="at">Case Rate per 100000</span><span class="st">`</span>,</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">y =</span> <span class="st">`</span><span class="at"># Tests per 100K</span><span class="st">`</span>,</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">color =</span> <span class="st">`</span><span class="at">Total % Positive</span><span class="st">`</span>)) <span class="sc">+</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_log10</span>(<span class="st">'Test Rate'</span>, </span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">labels =</span> scales<span class="sc">::</span>comma) <span class="sc">+</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Relationship between Covid-19 case rate and test rate"</span>,</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"per 100 thousand in 2021 autumn, 27 states without missing values"</span>,</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">"Source : CDC COVID Data Tracker"</span>,</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Case Rate"</span>) <span class="sc">+</span></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>comma) <span class="sc">+</span></span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_discrete</span>(<span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"3-4.9"</span>,<span class="st">"5-7.9"</span>,<span class="st">"8-9.9"</span>,<span class="st">"10-14.9"</span>,<span class="st">"15-19.9"</span>,<span class="st">"20-24.9"</span>),</span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>                       <span class="at">name =</span> <span class="st">"Total Positive (%)"</span>) <span class="sc">+</span></span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.margin =</span> <span class="fu">unit</span>(<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>), <span class="st">"cm"</span>),</span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text=</span><span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>),</span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>),</span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.subtitle =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">13</span>),    </span>
+<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="eda_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="exercise-07" class="level2">
+<h2 class="anchored" data-anchor-id="exercise-07">Exercise 07</h2>
+<p>I would like to choose more variables to test their relationship, not only in this file, but merging with other data set, such as vaccine data by state. Also, I want to know more categorical data like race so that I can have more graphs with group. Another good practice is try to build a linear regression model based on those numeric variables.</p>
+
 </section>
 
-</main>
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-cdc" class="csl-entry" role="listitem">
+CDC, COVID Data Tracker. n.d. <span>“Covid19<span>_</span>cases<span>_</span>and<span>_</span>testing.”</span>
+</div>
+</div></section></div></main>
 <!-- /main column -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
