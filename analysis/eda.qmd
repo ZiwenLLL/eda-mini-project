@@ -1,6 +1,8 @@
 ---
 title: "eda"
-format: html
+format: 
+  html:
+    embed-resources: true
 editor: visual
 author: Ziwen Lu
 execute:
